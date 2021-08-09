@@ -103,89 +103,89 @@ def reqDesc(desc, req_desc):
 #main loop
 
 
-    try:
-        print("started")
-        options = Options()
-        options.headless = True
+try:
+    print("started")
+    options = Options()
+    options.headless = True
 
-        driver = webdriver.Firefox(options=options, executable_path=r".\geckodriver.exe")
-        driver.get("https://www.carousell.sg/categories/motorcycles-108/motorcycles-for-sale-1592/class-2b-1595/?addRecent=false&canChangeKeyword=false&condition_v2=USED&includeSuggestions=false&price_end=12000&price_start=100&sc=0a0208141a0408bbe1722a180a0c636f6e646974696f6e5f763212060a045553454478012a210a05707269636522160a09090000000000005940120909000000000070c74078012a170a0b636f6c6c656374696f6e7312060a043135393578012a180a0c636f6e646974696f6e5f763212060a045553454478012a210a05707269636522160a09090000000000005940120909000000000070c740780132040803780142060800100018005000&searchId=gp6nEV&sort_by=time_created%2Cdescending")
-        print ("Headless Firefox Initialized")
+    driver = webdriver.Firefox(options=options, executable_path=r".\geckodriver.exe")
+    driver.get("https://www.carousell.sg/categories/motorcycles-108/motorcycles-for-sale-1592/class-2b-1595/?addRecent=false&canChangeKeyword=false&condition_v2=USED&includeSuggestions=false&price_end=12000&price_start=100&sc=0a0208141a0408bbe1722a180a0c636f6e646974696f6e5f763212060a045553454478012a210a05707269636522160a09090000000000005940120909000000000070c74078012a170a0b636f6c6c656374696f6e7312060a043135393578012a180a0c636f6e646974696f6e5f763212060a045553454478012a210a05707269636522160a09090000000000005940120909000000000070c740780132040803780142060800100018005000&searchId=gp6nEV&sort_by=time_created%2Cdescending")
+    print ("Headless Firefox Initialized")
 
-        #click load more
-        for x in range(0, 7):
-            load_more_button = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div/main/div[1]/button")
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            load_more_button.click()
-            print("Clicked Load More!")
-            sleep(3)
+    #click load more
+    for x in range(0, 7):
+        load_more_button = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div/main/div[1]/button")
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        load_more_button.click()
+        print("Clicked Load More!")
+        sleep(3)
 
-        page_html = driver.page_source
-        driver.quit()
-        page_soup = soup(page_html, "html.parser")
+    page_html = driver.page_source
+    driver.quit()
+    page_soup = soup(page_html, "html.parser")
 
-        #containersA = page_soup.findAll("a",href=True)
-        containersA = page_soup.findAll("a", href=re.compile("id="))
+    #containersA = page_soup.findAll("a",href=True)
+    containersA = page_soup.findAll("a", href=re.compile("id="))
 
-        title_list = []
-        price_list = []
-        link_list = []
-        user_list = []
+    title_list = []
+    price_list = []
+    link_list = []
+    user_list = []
 
-        for container in containersA:
-            if "/p/" in str(container):
-                if "title=" in str(container).split("<p class=")[1]:
-                    title = str(container).split("<p class=")[1].split('title="')[1].split('"/><')[0]
-                    title_list.append(title)
-                    link = "https://www.carousell.sg" + str(container['href']).split("?t-id=")[0]
-                    link_list.append(link)
+    for container in containersA:
+        if "/p/" in str(container):
+            if "title=" in str(container).split("<p class=")[1]:
+                title = str(container).split("<p class=")[1].split('title="')[1].split('"/><')[0]
+                title_list.append(title)
+                link = "https://www.carousell.sg" + str(container['href']).split("?t-id=")[0]
+                link_list.append(link)
 
-                else:
-                    title = str(container).split("<p class=")[1].split(">")[1].replace("</p","")
-                    if title == "Protection" or title == "Spotlight":
-                        title= str(container).split("<p class=")[2].split(">")[1].replace("</p","")
-                    title_list.append(title)
-                    link = "https://www.carousell.sg" + str(container['href']).split("?t-id=")[0]
-                    link_list.append(link)
+            else:
+                title = str(container).split("<p class=")[1].split(">")[1].replace("</p","")
+                if title == "Protection" or title == "Spotlight":
+                    title= str(container).split("<p class=")[2].split(">")[1].replace("</p","")
+                title_list.append(title)
+                link = "https://www.carousell.sg" + str(container['href']).split("?t-id=")[0]
+                link_list.append(link)
 
-                price = str(container).split("<p class=")[2].split(">")[1].replace("</p","").split("<span")[0]
-                if "S$" not in price:
-                    price = str(container).split("<p class=")[3].split(">")[1].replace("</p","").split("<span")[0]
-                
-                price_list.append(price)
+            price = str(container).split("<p class=")[2].split(">")[1].replace("</p","").split("<span")[0]
+            if "S$" not in price:
+                price = str(container).split("<p class=")[3].split(">")[1].replace("</p","").split("<span")[0]
+            
+            price_list.append(price)
 
-            elif "?t-id=" in str(container):
-                user = str(container).split("<p class=")[1].split(">")[1].replace("</p","")
-                user_list.append(user)
+        elif "?t-id=" in str(container):
+            user = str(container).split("<p class=")[1].split(">")[1].replace("</p","")
+            user_list.append(user)
 
-        finalstr = ""
-        
-        
+    finalstr = ""
+    
+    
 
-        f_r = open(finaltxt, "r", encoding="utf-8")
-        prev_url = f_r.read()
-        f_r.close()
+    f_r = open(finaltxt, "r", encoding="utf-8")
+    prev_url = f_r.read()
+    f_r.close()
 
-        for user, title, price, link in zip(user_list, title_list, price_list, link_list):
-            if link not in prev_url:
-                blacklink(link)
-                if filterUser(user, filter_users):
-                    if filterLink(link, filter_links):
-                        desc = getDesc(link)
-                        if filterDesc(desc, filter_descs):
-                            if reqDesc(desc, req_descs):
-                                new_desc = desc.replace("coe","COE").replace("Coe","COE")
-                                coe = between(new_desc,"COE","20")
-                                finalstr = (user + "|" + title + "|" + price + "\n" + coe + "\n" + link )
-                                print("Sending " + finalstr)
-                                bot = telegram.Bot(token="1214910019:AAGJqb0DJpp22Q14dV-hgR9E9wLnr76JW60")
-                                bot.sendMessage(chat_id=-498149684,text=finalstr,disable_web_page_preview=False)
+    for user, title, price, link in zip(user_list, title_list, price_list, link_list):
+        if link not in prev_url:
+            blacklink(link)
+            if filterUser(user, filter_users):
+                if filterLink(link, filter_links):
+                    desc = getDesc(link)
+                    if filterDesc(desc, filter_descs):
+                        if reqDesc(desc, req_descs):
+                            new_desc = desc.replace("coe","COE").replace("Coe","COE")
+                            coe = between(new_desc,"COE","20")
+                            finalstr = (user + "|" + title + "|" + price + "\n" + coe + "\n" + link )
+                            print("Sending " + finalstr)
+                            bot = telegram.Bot(token="1214910019:AAGJqb0DJpp22Q14dV-hgR9E9wLnr76JW60")
+                            bot.sendMessage(chat_id=-498149684,text=finalstr,disable_web_page_preview=False)
 
-        # input time in seconds 
-        t = 10
-        
-        # function call 
-        countdown(int(t))
+    # input time in seconds 
+    t = 10
+    
+    # function call 
+    countdown(int(t))
 
-    except:
-        print("failed")
+except:
+    print("failed")
