@@ -102,8 +102,9 @@ def reqDesc(desc, req_desc):
 
 #main loop
 
-while True:
+
     try:
+        print("started")
         options = Options()
         options.headless = True
 
@@ -187,8 +188,4 @@ while True:
         countdown(int(t))
 
     except:
-        # input time in seconds 
-        t = 60
-        
-        # function call 
-        countdown(int(t))
+        print("failed")
