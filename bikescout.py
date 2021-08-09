@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup as soup
 import re
 import telegram
 
+# functions
+
 def getDesc(link):
     options = Options()
     options.headless = True
@@ -97,6 +99,8 @@ def reqDesc(desc, req_desc):
         return False
     elif req_matches > 0:
         return True
+
+#main loop
 
 while True:
     try:
