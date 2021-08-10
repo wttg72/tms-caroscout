@@ -1,19 +1,20 @@
 from time import time, sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
 from bs4 import BeautifulSoup as soup
 import re
 import telegram
+import os
 
 # functions
 
 def getDesc(link):
     chrome_options = Options()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument("--headless")
-    chrome_options.add_argument("start-maximized")
-    chrome_options.add_argument("--disable-gpu")
-    driver = webdriver.Chrome(options=chrome_options)
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-sh-usage")
+    driver = webdriver.Chrome(executable_path= os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
     driver.get(link)
     paragraphs = driver.find_elements_by_tag_name('section')
     try:
@@ -108,9 +109,12 @@ def reqDesc(desc, req_desc):
 print("started")
 chrome_options = Options()
 #chrome_options.add_argument("--window-size=1920,2160")
+
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 #chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-gpu")
-driver = webdriver.Chrome(options=chrome_options)
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-sh-usage")
+driver = webdriver.Chrome(executable_path= os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
 driver.get("https://www.carousell.sg/categories/motorcycles-108/motorcycles-for-sale-1592/class-2b-1595/?addRecent=false&canChangeKeyword=false&condition_v2=USED&includeSuggestions=false&price_end=12000&price_start=100&sc=0a0208141a0408bbe1722a180a0c636f6e646974696f6e5f763212060a045553454478012a210a05707269636522160a09090000000000005940120909000000000070c74078012a170a0b636f6c6c656374696f6e7312060a043135393578012a180a0c636f6e646974696f6e5f763212060a045553454478012a210a05707269636522160a09090000000000005940120909000000000070c740780132040803780142060800100018005000&searchId=gp6nEV&sort_by=time_created%2Cdescending")
 print ("Headless Chrome Initialized")
 
